@@ -39,7 +39,10 @@ mkdir -p /var/log/sai_failure_dump/
 
 # Set synchronous mode if it is enabled in CONFIG_DB
 SYNC_MODE=$(echo $SYNCD_VARS | jq -r '.synchronous_mode')
-if [ "$SYNC_MODE" == "enable" ]; then
+DEVICE_TYPE=$(echo $SYNCD_VARS | jq -r '.type')
+if [ "$DEVICE_TYPE" == "SonicDpu" ]; then
+    CMD_ARGS+= " -z zmq_sync"
+elif [ "$SYNC_MODE" == "enable" ]; then
     CMD_ARGS+=" -s"
 fi
 
